@@ -1,0 +1,1701 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guide Métabolique — Eva Sis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0d0d;
+    --bg2: #141414;
+    --bg3: #1a1a1a;
+    --card: #181818;
+    --border: rgba(255,255,255,0.07);
+    --accent: #c8a96e;
+    --accent2: #e8c98e;
+    --text: #e8e4dc;
+    --muted: #7a7269;
+    --red: #c0392b;
+    --green: #2ecc71;
+    --blue: #5b8dd9;
+    --body-text-secondary: #c4bfb6;
+  }
+
+  html.light {
+    --bg: #f7f4ef;
+    --bg2: #eeeae3;
+    --bg3: #e5e0d7;
+    --card: #ede9e2;
+    --border: rgba(0,0,0,0.09);
+    --accent: #a07840;
+    --accent2: #c09550;
+    --text: #1a1714;
+    --muted: #8a7e6e;
+    --red: #b03020;
+    --green: #1d8f50;
+    --blue: #3a6ab8;
+    --body-text-secondary: #4a433a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow-x: hidden;
+    font-size: 16px;
+    line-height: 1.7;
+  }
+
+  /* ── GRAIN OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.025;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+  }
+
+  /* ── SIDEBAR ── */
+  #sidebar {
+    position: fixed;
+    left: 0; top: 0; bottom: 0;
+    width: 260px;
+    background: var(--bg2);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    z-index: 100;
+    transition: transform 0.4s cubic-bezier(.77,0,.18,1);
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .sidebar-logo {
+    padding: 32px 28px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .sidebar-logo h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    color: var(--accent);
+    font-weight: 400;
+    letter-spacing: 0.02em;
+  }
+
+  .sidebar-logo p {
+    font-size: 0.7rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-top: 4px;
+  }
+
+  .sidebar-progress {
+    padding: 16px 28px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .progress-label {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+
+  .progress-bar-wrap {
+    height: 2px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    width: 0%;
+    transition: width 0.3s ease;
+    border-radius: 2px;
+  }
+
+  .progress-text {
+    font-size: 0.65rem;
+    color: var(--muted);
+    margin-top: 6px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .sidebar-nav {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px 0;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+
+  .nav-section {
+    padding: 6px 0;
+  }
+
+  .nav-section-label {
+    padding: 8px 28px 4px;
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--muted);
+    opacity: 0.6;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 28px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 0.82rem;
+    color: var(--muted);
+    text-decoration: none;
+    position: relative;
+  }
+
+  .nav-item::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 50%;
+    transform: translateY(-50%);
+    width: 2px;
+    height: 0;
+    background: var(--accent);
+    transition: height 0.2s;
+    border-radius: 0 2px 2px 0;
+  }
+
+  .nav-item:hover, .nav-item.active {
+    color: var(--text);
+    background: rgba(200,169,110,0.05);
+  }
+
+  .nav-item.active::before { height: 20px; }
+
+  .nav-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--accent);
+    opacity: 0.7;
+    min-width: 18px;
+  }
+
+  /* ── MOBILE TOGGLE ── */
+  #menu-btn {
+    display: none;
+    position: fixed;
+    top: 16px; left: 16px;
+    z-index: 200;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    color: var(--accent);
+    width: 40px; height: 40px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 18px;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+  }
+
+  /* ── MAIN CONTENT ── */
+  #main {
+    margin-left: 260px;
+    min-height: 100vh;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative;
+    padding: 100px 80px 80px;
+    border-bottom: 1px solid var(--border);
+    overflow: hidden;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -1px; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  }
+
+  .hero-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+    margin-bottom: 24px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.1s forwards;
+  }
+
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.4rem, 4vw, 3.8rem);
+    font-weight: 700;
+    line-height: 1.15;
+    max-width: 680px;
+    margin-bottom: 24px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.2s forwards;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .hero-desc {
+    max-width: 540px;
+    color: var(--muted);
+    font-size: 1rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.3s forwards;
+    line-height: 1.75;
+  }
+
+  .hero-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 36px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.4s forwards;
+  }
+
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    font-size: 0.72rem;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.05em;
+    background: rgba(255,255,255,0.02);
+  }
+
+  .tag-dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .hero-deco {
+    position: absolute;
+    right: 60px;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.04;
+    font-family: 'Playfair Display', serif;
+    font-size: 14rem;
+    font-style: italic;
+    pointer-events: none;
+    user-select: none;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  /* ── SECTIONS ── */
+  .section {
+    padding: 80px 80px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .section.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .section-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+    margin-bottom: 48px;
+  }
+
+  .section-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--accent);
+    padding-top: 8px;
+    opacity: 0.8;
+    min-width: 28px;
+  }
+
+  .section-title-wrap h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.6rem, 2.5vw, 2.4rem);
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 8px;
+  }
+
+  .section-title-wrap .subtitle {
+    color: var(--muted);
+    font-size: 0.85rem;
+    font-style: italic;
+    font-family: 'Playfair Display', serif;
+  }
+
+  /* ── CONTENT BLOCKS ── */
+  .content {
+    max-width: 760px;
+  }
+
+  .content p {
+    color: var(--body-text-secondary);
+    margin-bottom: 20px;
+    font-size: 0.95rem;
+  }
+
+  .content h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem;
+    margin: 36px 0 12px;
+    color: var(--text);
+  }
+
+  .content h4 {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    margin: 28px 0 10px;
+  }
+
+  .content strong {
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  /* ── CALLOUT ── */
+  .callout {
+    border-left: 2px solid var(--accent);
+    padding: 16px 20px 16px 24px;
+    background: rgba(200,169,110,0.04);
+    border-radius: 0 8px 8px 0;
+    margin: 28px 0;
+    font-style: italic;
+    color: var(--text);
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem;
+    line-height: 1.6;
+  }
+
+  /* ── KEY POINTS ── */
+  .key-points {
+    display: grid;
+    gap: 12px;
+    margin: 28px 0;
+  }
+
+  .kp {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 14px 18px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-size: 0.87rem;
+    color: #bbb5ab;
+    transition: border-color 0.2s;
+  }
+
+  .kp:hover { border-color: rgba(200,169,110,0.25); }
+
+  .kp-icon {
+    font-size: 1rem;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* ── MACRO CARDS ── */
+  .macro-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin: 32px 0;
+  }
+
+  .macro-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 24px 20px;
+    transition: all 0.25s;
+    cursor: default;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .macro-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--mc-color);
+    opacity: 0.6;
+    transition: opacity 0.2s;
+  }
+
+  .macro-card:hover { border-color: rgba(255,255,255,0.12); transform: translateY(-2px); }
+  .macro-card:hover::before { opacity: 1; }
+
+  .macro-name {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--mc-color);
+    margin-bottom: 10px;
+  }
+
+  .macro-kcal {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    color: var(--text);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .macro-kcal span {
+    font-size: 0.8rem;
+    color: var(--muted);
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .macro-thermal {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+
+  .macro-desc {
+    font-size: 0.78rem;
+    color: #7a7269;
+    line-height: 1.55;
+  }
+
+  /* ── RANDLE VISUALIZATION ── */
+  .randle-viz {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px;
+    margin: 32px 0;
+  }
+
+  .randle-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    margin-bottom: 28px;
+    text-align: center;
+  }
+
+  .randle-row {
+    display: grid;
+    grid-template-columns: 1fr 40px 1fr;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+
+  .randle-fuel {
+    padding: 16px;
+    border-radius: 10px;
+    text-align: center;
+    border: 1px solid var(--border);
+  }
+
+  .fuel-fat { background: rgba(192, 57, 43, 0.08); border-color: rgba(192,57,43,0.2); }
+  .fuel-glucose { background: rgba(46, 204, 113, 0.08); border-color: rgba(46,204,113,0.2); }
+
+  .fuel-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 6px;
+  }
+
+  .fuel-fat .fuel-label { color: #c0392b; }
+  .fuel-glucose .fuel-label { color: #2ecc71; }
+
+  .fuel-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    color: var(--text);
+  }
+
+  .arrow-center {
+    text-align: center;
+    color: var(--muted);
+    font-size: 1.4rem;
+  }
+
+  .randle-inhibition {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .inhibit-bar {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 8px;
+    align-items: center;
+    font-size: 0.72rem;
+  }
+
+  .inhibit-label {
+    color: var(--muted);
+    text-align: right;
+    line-height: 1.3;
+  }
+
+  .inhibit-label.right { text-align: left; }
+
+  .inhibit-strength {
+    padding: 4px 10px;
+    border-radius: 100px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .strong { background: rgba(192,57,43,0.2); color: #e74c3c; }
+  .weak { background: rgba(91,141,217,0.2); color: #5b8dd9; }
+
+  /* ── SCENARIO CARDS ── */
+  .scenario-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin: 32px 0;
+  }
+
+  .scenario {
+    border-radius: 14px;
+    padding: 24px 20px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .scenario.bad { border-color: rgba(192,57,43,0.25); }
+  .scenario.neutral { border-color: rgba(91,141,217,0.25); }
+  .scenario.good { border-color: rgba(46,204,113,0.25); }
+
+  .scenario-rating {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 8px;
+  }
+
+  .bad .scenario-rating { color: #c0392b; }
+  .neutral .scenario-rating { color: #5b8dd9; }
+  .good .scenario-rating { color: #2ecc71; }
+
+  .scenario-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    margin-bottom: 14px;
+    color: var(--text);
+  }
+
+  .scenario-items {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .scenario-items li {
+    font-size: 0.77rem;
+    color: var(--muted);
+    padding-left: 14px;
+    position: relative;
+  }
+
+  .scenario-items li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--border);
+    font-size: 0.7rem;
+  }
+
+  /* ── HORMONE TABLE ── */
+  .hormone-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 28px 0;
+    font-size: 0.83rem;
+  }
+
+  .hormone-table th {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+    font-weight: 400;
+  }
+
+  .hormone-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    color: #bbb5ab;
+    vertical-align: top;
+  }
+
+  .hormone-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+  .badge {
+    display: inline-flex;
+    padding: 3px 9px;
+    border-radius: 100px;
+    font-size: 0.65rem;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.04em;
+  }
+
+  .badge-up { background: rgba(46,204,113,0.15); color: #2ecc71; }
+  .badge-down { background: rgba(192,57,43,0.15); color: #e74c3c; }
+  .badge-neutral { background: rgba(91,141,217,0.15); color: #5b8dd9; }
+
+  /* ── GLYCOGEN VIZ ── */
+  .glycogen-viz {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px 28px;
+    margin: 28px 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+
+  .glycogen-item { text-align: center; }
+
+  .glycogen-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+
+  .glycogen-tank {
+    width: 80px;
+    height: 120px;
+    margin: 0 auto 12px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .glycogen-fill {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    background: linear-gradient(180deg, rgba(200,169,110,0.6), rgba(200,169,110,0.3));
+    border-radius: 0 0 6px 6px;
+    transition: height 1s cubic-bezier(.34,1.56,.64,1);
+  }
+
+  .glycogen-amt {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    color: var(--accent);
+  }
+
+  .glycogen-unit {
+    font-size: 0.7rem;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  /* ── TDEE BREAKDOWN ── */
+  .tdee-bars {
+    margin: 28px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .tdee-row {
+    display: grid;
+    grid-template-columns: 160px 1fr 60px;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .tdee-name {
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+
+  .tdee-bar-wrap {
+    height: 6px;
+    background: var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .tdee-bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    width: 0;
+    transition: width 1.2s cubic-bezier(.34,1.56,.64,1);
+  }
+
+  .tdee-pct {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--accent);
+    text-align: right;
+  }
+
+  /* ── PROLOGUE / STORY ── */
+  .story-block {
+    position: relative;
+    padding: 36px 0 36px 32px;
+    border-left: 2px solid var(--border);
+    margin: 32px 0;
+  }
+
+  .story-block::before {
+    content: '';
+    position: absolute;
+    left: -4px; top: 36px;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 0 4px rgba(200,169,110,0.15);
+  }
+
+  .story-block p {
+    color: #a09890;
+    font-style: italic;
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    line-height: 1.75;
+  }
+
+  /* ── EXPERIENCE LIST ── */
+  .exp-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 20px 0;
+  }
+
+  .exp-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 10px 16px;
+    border-radius: 8px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    font-size: 0.83rem;
+    color: var(--muted);
+  }
+
+  .exp-icon { font-size: 0.9rem; }
+
+  /* ── PART BANNER ── */
+  .part-banner {
+    margin: 48px 0 0;
+    padding: 28px 32px;
+    background: linear-gradient(135deg, rgba(200,169,110,0.07), rgba(200,169,110,0.02));
+    border: 1px solid rgba(200,169,110,0.15);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .part-icon {
+    font-size: 2rem;
+    flex-shrink: 0;
+  }
+
+  .part-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+
+  .part-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    color: var(--text);
+  }
+
+  /* ── INTERACTIVE TOGGLE ── */
+  .tabs {
+    display: flex;
+    gap: 0;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 24px 0 0;
+    width: fit-content;
+  }
+
+  .tab-btn {
+    padding: 9px 20px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    transition: all 0.2s;
+  }
+
+  .tab-btn.active {
+    background: rgba(200,169,110,0.1);
+    color: var(--accent);
+  }
+
+  .tab-btn + .tab-btn { border-left: 1px solid var(--border); }
+
+  .tab-content { display: none; margin-top: 20px; }
+  .tab-content.active { display: block; }
+
+  /* ── FOOTER ── */
+  .footer {
+    padding: 60px 80px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.78rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .footer p { margin-bottom: 6px; }
+  .footer strong { color: var(--accent); font-weight: 400; }
+
+  /* ── SCROLL TO TOP ── */
+  #scroll-top {
+    position: fixed;
+    bottom: 28px; right: 28px;
+    width: 42px; height: 42px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 16px;
+    z-index: 99;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.3s;
+  }
+
+  #scroll-top.show { opacity: 1; transform: translateY(0); }
+  #scroll-top:hover { background: var(--bg3); color: var(--accent); border-color: rgba(200,169,110,0.3); }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    #sidebar {
+      transform: translateX(-100%);
+    }
+    #sidebar.open { transform: translateX(0); }
+    #menu-btn { display: flex; }
+    #main { margin-left: 0; }
+    .hero, .section { padding: 72px 28px 60px; }
+    .hero { padding-top: 72px; }
+    .macro-grid, .scenario-grid { grid-template-columns: 1fr; }
+    .glycogen-viz { grid-template-columns: 1fr 1fr; }
+    .hero-deco { display: none; }
+    .tdee-row { grid-template-columns: 120px 1fr 50px; }
+  }
+
+  @media (max-width: 600px) {
+    .glycogen-viz { grid-template-columns: 1fr; }
+    .randle-row { grid-template-columns: 1fr; }
+    .arrow-center { display: none; }
+  }
+
+  /* ── THEME TOGGLE ── */
+  .sidebar-theme {
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .theme-toggle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 8px 12px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    cursor: pointer;
+    color: var(--muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.78rem;
+    transition: all 0.2s;
+  }
+
+  .theme-toggle:hover {
+    border-color: rgba(200,169,110,0.3);
+    color: var(--text);
+  }
+
+  .theme-icon { font-size: 0.9rem; flex-shrink: 0; }
+
+  /* light mode extra fixes */
+  html.light .kp { color: #4a433a; }
+  html.light .hormone-table td { color: #4a433a; }
+  html.light .scenario-items li { color: var(--muted); }
+  html.light .exp-item { color: var(--muted); }
+  html.light .story-block p { color: #6a5e50; }
+  html.light body::before { opacity: 0.015; }</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<button id="menu-btn" onclick="toggleSidebar()">☰</button>
+
+<nav id="sidebar">
+  <div class="sidebar-logo">
+    <h2>Guide Métabolique</h2>
+    <p>Pour Eva — Version complète à venir</p>
+  </div>
+  <div class="sidebar-progress">
+    <div class="progress-label">Progression</div>
+    <div class="progress-bar-wrap"><div class="progress-bar" id="progressBar"></div></div>
+    <div class="progress-text" id="progressText">0%</div>
+  </div>
+  <div class="sidebar-theme">
+    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">
+      <span class="theme-icon" id="themeIcon">☀️</span>
+      <span class="theme-label" id="themeLabel">Mode clair</span>
+    </button>
+  </div>
+  <div class="sidebar-nav">
+    <div class="nav-section">
+      <div class="nav-section-label">Introduction</div>
+      <a class="nav-item" href="#prologue" onclick="closeSidebar()"><span class="nav-num">00</span>Prologue</a>
+      <a class="nav-item" href="#avant" onclick="closeSidebar()"><span class="nav-num">—</span>Mon expérience</a>
+    </div>
+    <div class="nav-section">
+      <div class="nav-section-label">Partie I — Nutrition</div>
+      <a class="nav-item" href="#ch1" onclick="closeSidebar()"><span class="nav-num">01</span>Qu'est-ce qu'une calorie</a>
+      <a class="nav-item" href="#ch2" onclick="closeSidebar()"><span class="nav-num">02</span>Les macronutriments</a>
+      <a class="nav-item" href="#ch3" onclick="closeSidebar()"><span class="nav-num">03</span>Ce qui arrive aux macros</a>
+      <a class="nav-item" href="#ch4" onclick="closeSidebar()"><span class="nav-num">04</span>Cycle de Randle</a>
+      <a class="nav-item" href="#ch5" onclick="closeSidebar()"><span class="nav-num">05</span>Oxydation des carburants</a>
+      <a class="nav-item" href="#ch6" onclick="closeSidebar()"><span class="nav-num">06</span>Insuline & lipolyse</a>
+      <a class="nav-item" href="#ch7" onclick="closeSidebar()"><span class="nav-num">07</span>Où CICO s'effondre</a>
+      <a class="nav-item" href="#ch8" onclick="closeSidebar()"><span class="nav-num">08</span>Pourquoi high-carb low-fat</a>
+    </div>
+    <div class="nav-section">
+      <div class="nav-section-label">À venir</div>
+      <a class="nav-item" href="#coming" onclick="closeSidebar()"><span class="nav-num">II</span>Activité & entraînement</a>
+      <a class="nav-item" href="#coming" onclick="closeSidebar()"><span class="nav-num">III</span>Descendre sous 10%</a>
+    </div>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<div id="main">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-deco">E</div>
+    <div class="hero-eyebrow">Guide Métabolique Complet</div>
+    <h1>Au-delà des<br><em>calories</em></h1>
+    <p class="hero-desc">Un guide complet pour une perte de graisse durable — couvrant les macros, le cycle de Randle, la thyroïde, les recharges et le partitionnement des carburants.</p>
+    <div class="hero-tags">
+      <span class="tag"><span class="tag-dot"></span>Cycle de Randle</span>
+      <span class="tag"><span class="tag-dot"></span>Macronutriments</span>
+      <span class="tag"><span class="tag-dot"></span>Thyroïde & hormones</span>
+      <span class="tag"><span class="tag-dot"></span>Partitionnement énergétique</span>
+      <span class="tag"><span class="tag-dot"></span>High Carb Low Fat</span>
+    </div>
+  </section>
+
+  <!-- PROLOGUE -->
+  <section class="section" id="prologue">
+    <div class="section-header">
+      <div class="section-num">00</div>
+      <div class="section-title-wrap">
+        <h2>Pourquoi la plupart des conseils<br>sur la perte de graisse échouent</h2>
+        <div class="subtitle">Prologue</div>
+      </div>
+    </div>
+    <div class="content">
+      <p>Si la perte de graisse était aussi simple que "mangez moins, bougez plus", la plupart des gens n'auraient pas autant de mal. La formule semble pourtant claire à première vue : réduire les calories, augmenter l'activité, le corps brûle les graisses stockées.</p>
+      <div class="callout">Et pourtant, en réalité, quelque chose d'autre se produit.</div>
+      <p>Les gens suivent des régimes stricts pendant des semaines. La balance bouge. Puis elle stagne. Le problème n'est pas que la thermodynamique soit fausse. C'est que <strong>le corps ne peut pas être réduit à une simple machine statique.</strong></p>
+
+      <div class="key-points">
+        <div class="kp"><span class="kp-icon">🧬</span><span>C'est un système biologique dynamique gouverné par les hormones, les boucles de rétroaction, les signaux de stress et les mécanismes de survie.</span></div>
+        <div class="kp"><span class="kp-icon">⚡</span><span>Quand vous réduisez les calories, votre corps interprète la situation — il décide si les conditions ressemblent à la croissance ou à la famine.</span></div>
+        <div class="kp"><span class="kp-icon">🔄</span><span>Cette décision change tout : taux métabolique, substrat brûlé, distribution des graisses, hormones reproductives.</span></div>
+      </div>
+
+      <h4>La vraie question n'est pas "combien de calories" mais :</h4>
+      <div class="key-points">
+        <div class="kp"><span class="kp-icon">🎯</span><span>Quels carburants (substrats) sont oxydés vs stockés ?</span></div>
+        <div class="kp"><span class="kp-icon">📊</span><span>Quelles hormones dominent — croissance ou stress ?</span></div>
+        <div class="kp"><span class="kp-icon">🔥</span><span>Le métabolisme est-il soutenu ou supprimé ?</span></div>
+      </div>
+
+      <div class="callout">La perte de graisse n'est pas déclenchée par un chiffre sur une application de calories.<br>Elle est <em>permise</em> par l'environnement hormonal.</div>
+
+      <p>Ce guide n'est pas à propos d'une perte de 5 kg en 4 semaines. Il s'agit de construire une base nutritionnelle qui permet d'<strong>atteindre moins de 15% de masse graisseuse durablement</strong> — sans fatigue chronique, suppression hormonale ou reprise de poids.</p>
+
+      <div class="part-banner">
+        <span class="part-icon">📚</span>
+        <div>
+          <div class="part-label">Structure du guide</div>
+          <div class="part-title">Partie I : Nutrition &nbsp;·&nbsp; Partie II : Activité &nbsp;·&nbsp; Partie III : Descendre sous 10%</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AVANT DE CONTINUER -->
+  <section class="section" id="avant">
+    <div class="section-header">
+      <div class="section-num">—</div>
+      <div class="section-title-wrap">
+        <h2>10 ans d'essais & d'erreurs</h2>
+        <div class="subtitle">Avant de continuer à lire</div>
+      </div>
+    </div>
+    <div class="content">
+      <p>Ce guide est le fruit de 10 ans d'essais et d'erreurs personnels. J'ai essayé des choses comme :</p>
+      <div class="exp-list">
+        <div class="exp-item"><span class="exp-icon">🏃</span>Courir 10 km par jour</div>
+        <div class="exp-item"><span class="exp-icon">💥</span>30 minutes de HIIT quotidien</div>
+        <div class="exp-item"><span class="exp-icon">💪</span>Shortcut to Shred (Jim Stoppani) — cardio entre les séries</div>
+        <div class="exp-item"><span class="exp-icon">🥩</span>Régime cétogène strict — moins de 20g de glucides</div>
+        <div class="exp-item"><span class="exp-icon">⏱️</span>Jeûne intermittent</div>
+        <div class="exp-item"><span class="exp-icon">💧</span>Jeûne à l'eau de 7 jours</div>
+        <div class="exp-item"><span class="exp-icon">📉</span>Déficits agressifs extrêmes (~1 500 kcal)</div>
+        <div class="exp-item"><span class="exp-icon">🍊</span>Peating sans respecter le cycle de Randle</div>
+      </div>
+      <div class="story-block">
+        <p>Certaines approches m'ont rendu plus gros. D'autres ont fonctionné, mais uniquement temporairement. D'autres encore venaient avec des effets secondaires : faible énergie, faible libido, perte de cheveux, mauvais sommeil.</p>
+      </div>
+      <div class="callout">Je continuais à me demander comment certaines personnes pouvaient manger beaucoup, avoir énormément d'énergie, et rester sèches.<br>Au lieu de passer à un autre protocole, j'ai décidé de <em>comprendre le métabolisme lui-même.</em></div>
+    </div>
+  </section>
+
+  <!-- CHAPITRE 1 -->
+  <section class="section" id="ch1">
+    <div class="section-header">
+      <div class="section-num">01</div>
+      <div class="section-title-wrap">
+        <h2>Ce qu'est vraiment une calorie</h2>
+        <div class="subtitle">Chapitre 1 — Thermodynamique & ses limites</div>
+      </div>
+    </div>
+    <div class="content">
+      <p>Une calorie est une unité d'énergie. En nutrition, on utilise la kilocalorie (kcal) — la quantité d'énergie nécessaire pour élever 1 kg d'eau de 1°C. Mais ton corps n'est pas une chambre d'acier. La nourriture est digérée, absorbée, transportée, métabolisée, stockée, convertie...</p>
+
+      <h3>Les "Calories Sortantes" ne sont pas fixes</h3>
+      <p>La dépense énergétique journalière (TDEE) est composée de 4 éléments — chacun influencé par l'état métabolique.</p>
+
+      <div class="tdee-bars" id="tdeeBars">
+        <div class="tdee-row">
+          <span class="tdee-name">Métabolisme de base (BMR)</span>
+          <div class="tdee-bar-wrap"><div class="tdee-bar-fill" data-width="65"></div></div>
+          <span class="tdee-pct">~65%</span>
+        </div>
+        <div class="tdee-row">
+          <span class="tdee-name">NEAT (mouvements)</span>
+          <div class="tdee-bar-wrap"><div class="tdee-bar-fill" data-width="20"></div></div>
+          <span class="tdee-pct">~20%</span>
+        </div>
+        <div class="tdee-row">
+          <span class="tdee-name">Exercice physique</span>
+          <div class="tdee-bar-wrap"><div class="tdee-bar-fill" data-width="10"></div></div>
+          <span class="tdee-pct">~10%</span>
+        </div>
+        <div class="tdee-row">
+          <span class="tdee-name">Effet thermique (ETA)</span>
+          <div class="tdee-bar-wrap"><div class="tdee-bar-fill" data-width="8"></div></div>
+          <span class="tdee-pct">~8%</span>
+        </div>
+      </div>
+
+      <div class="callout">Quand les calories sont chroniquement restreintes, le corps abaisse la dépense énergétique pour préserver la survie. Ce n'est pas un échec — c'est la <em>biologie de survie.</em></div>
+
+      <h4>Ce que les calculateurs ne prennent pas en compte</h4>
+      <div class="key-points">
+        <div class="kp"><span class="kp-icon">🦋</span>La thermogenèse adaptative</div>
+        <div class="kp"><span class="kp-icon">🩸</span>Les fluctuations thyroïdiennes</div>
+        <div class="kp"><span class="kp-icon">😴</span>La qualité du sommeil</div>
+        <div class="kp"><span class="kp-icon">🦠</span>Les différences de microbiome intestinal</div>
+        <div class="kp"><span class="kp-icon">⚗️</span>L'efficacité mitochondriale</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHAPITRE 2 -->
+  <section class="section" id="ch2">
+    <div class="section-header">
+      <div class="section-num">02</div>
+      <div class="section-title-wrap">
+        <h2>Les macronutriments</h2>
+        <div class="subtitle">Chapitre 2 — Ce que vous mangez vraiment</div>
+      </div>
+    </div>
+    <div class="content">
+      <p>La plupart des gens mangent "healthy" sans savoir combien de grammes de lipides, glucides ou protéines ils consomment réellement. La perte de graisse sans conscience de ses macros est comparable à gérer ses finances sans connaître ses revenus ni ses dépenses.</p>
+
+      <div class="macro-grid">
+        <div class="macro-card" style="--mc-color: #5b8dd9">
+          <div class="macro-name">Protéines</div>
+          <div class="macro-kcal">4 <span>kcal/g</span></div>
+          <div class="macro-thermal">Effet thermique : 20–30%</div>
+          <div class="macro-desc">Réparation musculaire, enzymes, hormones. Métaboliquement coûteuses. Rarement converties en graisse.</div>
+        </div>
+        <div class="macro-card" style="--mc-color: #2ecc71">
+          <div class="macro-name">Glucides</div>
+          <div class="macro-kcal">4 <span>kcal/g</span></div>
+          <div class="macro-thermal">Effet thermique : 5–10%</div>
+          <div class="macro-desc">Carburant préféré à haute intensité. Stockés en glycogène avant toute conversion en graisse (DNL).</div>
+        </div>
+        <div class="macro-card" style="--mc-color: #e67e22">
+          <div class="macro-name">Graisses</div>
+          <div class="macro-kcal">9 <span>kcal/g</span></div>
+          <div class="macro-thermal">Effet thermique : 2–3%</div>
+          <div class="macro-desc">Denses en énergie. Déjà sous forme prête au stockage. Efficacité de stockage : 90–98%.</div>
+        </div>
+      </div>
+
+      <div class="tabs" id="macroTabs">
+        <button class="tab-btn active" onclick="setTab(this, 'tab-cuisine')">🍳 Cuisiner soi-même</button>
+        <button class="tab-btn" onclick="setTab(this, 'tab-labels')">🏷️ Lire les étiquettes</button>
+        <button class="tab-btn" onclick="setTab(this, 'tab-alcool')">🍷 L'alcool</button>
+      </div>
+
+      <div class="tab-content active" id="tab-cuisine">
+        <div class="key-points">
+          <div class="kp"><span class="kp-icon">✅</span>Tu contrôles la quantité exacte de graisses utilisées</div>
+          <div class="kp"><span class="kp-icon">✅</span>Tu élimines les huiles de graines cachées des restaurants</div>
+          <div class="kp"><span class="kp-icon">✅</span>Tu élimines toute approximation sur tes macros</div>
+          <div class="kp"><span class="kp-icon">❌</span>Au restaurant : huiles invisibles, portions inconsistantes, sauces grasses</div>
+        </div>
+        <div class="callout">Si tu veux perdre du gras, cuisiner toi-même n'est pas optionnel. C'est du contrôle.</div>
+      </div>
+
+      <div class="tab-content" id="tab-labels">
+        <p style="margin-bottom:16px; font-size:0.87rem; color:var(--muted)">Ce qu'il faut absolument regarder sur une étiquette :</p>
+        <table class="hormone-table">
+          <thead><tr><th>#</th><th>Élément</th><th>Pourquoi c'est important</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>Taille de portion</td><td>Les étiquettes sont trompeuses — multiplier par la consommation réelle</td></tr>
+            <tr><td>2</td><td>Graisses totales</td><td>10g de graisse sous-estimés = +90 kcal cachées</td></tr>
+            <tr><td>3</td><td>Source des glucides</td><td>Qualité influence vitesse de digestion et satiété</td></tr>
+            <tr><td>4</td><td>Protéines</td><td>La plupart des gens les surestiment — mesurer réellement</td></tr>
+            <tr><td>5</td><td>Liste d'ingrédients</td><td>Graisses cachées dans sauces, granolas, beurres de noix</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="tab-content" id="tab-alcool">
+        <p>L'alcool fournit 7 kcal/g mais perturbe bien plus que ça :</p>
+        <div class="key-points">
+          <div class="kp"><span class="kp-icon">🔴</span>Le foie le métabolise en priorité — supprimant l'oxydation des graisses</div>
+          <div class="kp"><span class="kp-icon">🔴</span>Shift NAD+/NADH qui favorise le stockage des graisses</div>
+          <div class="kp"><span class="kp-icon">🔴</span>Augmente le cortisol, altère la qualité du sommeil</div>
+          <div class="kp"><span class="kp-icon">🔴</span>Réduit la sensibilité à l'insuline</div>
+        </div>
+        <div class="callout">L'alcool ne sont pas "juste des calories supplémentaires". Il modifie la hiérarchie des carburants et la régulation hormonale.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHAPITRE 3 -->
+  <section class="section" id="ch3">
+    <div class="section-header">
+      <div class="section-num">03</div>
+      <div class="section-title-wrap">
+        <h2>Ce qui arrive aux graisses, glucides<br>et protéines dans le corps</h2>
+        <div class="subtitle">Chapitre 3 — Voies métaboliques</div>
+      </div>
+    </div>
+    <div class="content">
+      <div class="callout">La perte de graisse ne consiste pas à juste "manger moins".<br>Il s'agit de <em>ce qui est stocké et ce qui est oxydé.</em></div>
+
+      <h3>Les graisses : le nutriment de stockage le plus efficace</h3>
+      <p>La graisse alimentaire est déjà sous forme prête au stockage. Le corps la re-estérifie simplement en triglycérides. Les recherches montrent systématiquement que <strong>90–98% de l'excès de graisses alimentaires peut être stocké directement</strong> avec un coût énergétique minimal.</p>
+
+      <h3>Les glucides : stocker en glycogène d'abord</h3>
+      <p>Les glucides sont décomposés en glucose. Le corps préfère toujours les oxyder en premier. Avant toute conversion en graisse, il faut d'abord remplir les réserves de glycogène.</p>
+
+      <div class="glycogen-viz" id="glycogenViz">
+        <div class="glycogen-item">
+          <div class="glycogen-label">Foie</div>
+          <div class="glycogen-tank">
+            <div class="glycogen-fill" id="glycFoie" style="height: 0%"></div>
+          </div>
+          <div class="glycogen-amt">80–120g</div>
+          <div class="glycogen-unit">glycogène</div>
+        </div>
+        <div class="glycogen-item">
+          <div class="glycogen-label">Muscles squelettiques</div>
+          <div class="glycogen-tank">
+            <div class="glycogen-fill" id="glycMuscle" style="height: 0%"></div>
+          </div>
+          <div class="glycogen-amt">300–600g</div>
+          <div class="glycogen-unit">glycogène</div>
+        </div>
+      </div>
+
+      <p>C'est seulement quand ces réserves sont saturées et que l'apport reste excessif que la <strong>lipogenèse de novo (DNL)</strong> augmente. Et dans des conditions normales, la DNL chez l'humain est <strong>extrêmement faible — moins de 1%</strong> de l'apport en glucides.</p>
+
+      <h3>Comparaison des effets thermiques</h3>
+      <div class="tdee-bars">
+        <div class="tdee-row">
+          <span class="tdee-name">Protéines</span>
+          <div class="tdee-bar-wrap"><div class="tdee-bar-fill" data-width="100" style="background:linear-gradient(90deg,#5b8dd9,#7ab3f5)"></div></div>
+          <span class="tdee-pct" style="color:#5b8dd9">20–30%</span>
+        </div>
+        <div class="tdee-row">
+          <span class="tdee-name">Glucides</span>
+          <div class="tdee-bar-wrap"><div class="tdee-bar-fill" data-width="30" style="background:linear-gradient(90deg,#2ecc71,#5ef5a4)"></div></div>
+          <span class="tdee-pct" style="color:#2ecc71">5–10%</span>
+        </div>
+        <div class="tdee-row">
+          <span class="tdee-name">Graisses</span>
+          <div class="tdee-bar-wrap"><div class="tdee-bar-fill" data-width="8" style="background:linear-gradient(90deg,#e67e22,#f5a65e)"></div></div>
+          <span class="tdee-pct" style="color:#e67e22">2–3%</span>
+        </div>
+      </div>
+      <p>1 000 kcal de graisses ne sont pas métaboliquement identiques à 1 000 kcal de protéines. Le corps les traite différemment.</p>
+    </div>
+  </section>
+
+  <!-- CHAPITRE 4 -->
+  <section class="section" id="ch4">
+    <div class="section-header">
+      <div class="section-num">04</div>
+      <div class="section-title-wrap">
+        <h2>Le Cycle de Randle</h2>
+        <div class="subtitle">Chapitre 4 — Compétition des carburants</div>
+      </div>
+    </div>
+    <div class="content">
+      <p>Le cycle de Randle — aussi appelé cycle glucose–acides gras — décrit comment les graisses et le glucose entrent en compétition en tant que carburants dans le corps. Cette compétition détermine quel substrat est brûlé, quel substrat est stocké, et comment la sensibilité à l'insuline évolue.</p>
+
+      <div class="randle-viz">
+        <div class="randle-title">Asymétrie de l'inhibition — Cycle de Randle</div>
+        <div class="randle-inhibition">
+          <div class="inhibit-bar">
+            <span class="inhibit-label">Acides gras<br>oxydés ↑</span>
+            <span class="inhibit-strength strong">↓ Forte inhibition</span>
+            <span class="inhibit-label right">Oxydation<br>du glucose</span>
+          </div>
+          <div style="height:1px; background:var(--border); margin:8px 0"></div>
+          <div class="inhibit-bar">
+            <span class="inhibit-label">Glucose<br>oxydé ↑</span>
+            <span class="inhibit-strength weak">↓ Inhibition modérée</span>
+            <span class="inhibit-label right">Oxydation<br>des graisses</span>
+          </div>
+        </div>
+        <p style="font-size:0.75rem; color:var(--muted); margin-top:18px; font-style:italic; text-align:center;">L'oxydation des graisses supprime l'oxydation du glucose plus fortement que l'inverse.</p>
+      </div>
+
+      <h3>Les 3 scénarios alimentaires</h3>
+      <div class="scenario-grid">
+        <div class="scenario bad">
+          <div class="scenario-rating">⚠️ Pire scénario</div>
+          <div class="scenario-name">Riche en graisses<br>+ Riche en glucides</div>
+          <ul class="scenario-items">
+            <li>Les deux carburants en compétition</li>
+            <li>Acides gras inhibent l'oxydation du glucose</li>
+            <li>Insuline élevée → stockage des graisses facilité</li>
+            <li>Énergie instable</li>
+          </ul>
+        </div>
+        <div class="scenario neutral">
+          <div class="scenario-rating">⚡ Fonctionne partiellement</div>
+          <div class="scenario-name">Riche en graisses<br>+ Pauvre en glucides</div>
+          <ul class="scenario-items">
+            <li>Insuline basse</li>
+            <li>Oxydation des graisses élevée</li>
+            <li>Mais : dépendance aux hormones de stress</li>
+            <li>Thyroïde potentiellement réduite</li>
+          </ul>
+        </div>
+        <div class="scenario good">
+          <div class="scenario-rating">✅ Optimal pour perdre</div>
+          <div class="scenario-name">Riche en glucides<br>+ Pauvre en graisses</div>
+          <ul class="scenario-items">
+            <li>Oxydation du glucose prioritaire</li>
+            <li>Glycogène reconstitué</li>
+            <li>Peu de graisses disponibles à stocker</li>
+            <li>Fonction thyroïdienne stable</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="callout">Si tu combines un apport élevé en graisses et en glucides, tu augmentes la probabilité que les graisses alimentaires soient stockées.<br>Quand tu comprends la compétition des carburants, tu arrêtes de mélanger les macros aléatoirement.</div>
+    </div>
+  </section>
+
+  <!-- CHAPITRE 5 -->
+  <section class="section" id="ch5">
+    <div class="section-header">
+      <div class="section-num">05</div>
+      <div class="section-title-wrap">
+        <h2>Oxydation du glucose vs graisses</h2>
+        <div class="subtitle">Chapitre 5 — Ce qui alimente vraiment ton métabolisme</div>
+      </div>
+    </div>
+    <div class="content">
+      <p>La perte de graisse ne concerne pas seulement le stockage. Elle concerne <strong>l'oxydation</strong>. La graisse doit être libérée du tissu adipeux, transportée vers les tissus, et oxydée dans les mitochondries. L'oxydation n'est pas automatique — elle est régulée.</p>
+
+      <h3>Oxydation du glucose : carburant haute vitesse</h3>
+      <p>Le glucose suit un chemin précis : glycolyse → pyruvate → mitochondries → cycle de Krebs → ATP. L'enzyme clé est la <strong>pyruvate déshydrogénase (PDH)</strong>. Si la PDH est inhibée, le glucose est dévié vers la production de lactate.</p>
+
+      <h4>Nutriments nécessaires pour une oxydation efficace</h4>
+      <table class="hormone-table">
+        <thead><tr><th>Nutriment</th><th>Rôle</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Vitamine B1 (thiamine)</strong></td><td>Essentielle pour l'activation de la PDH</td></tr>
+          <tr><td><strong>Magnésium</strong></td><td>Nécessaire pour la stabilité de l'ATP</td></tr>
+          <tr><td><strong>Vitamine B3 (niacinamide)</strong></td><td>Soutient les réserves de NAD+</td></tr>
+          <tr><td><strong>Hormone thyroïdienne (T3)</strong></td><td>Augmente la respiration mitochondriale</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Flexibilité métabolique</h3>
+      <div class="tabs" id="flexTabs">
+        <button class="tab-btn active" onclick="setTab(this, 'tab-flex-ok')">✅ Flexible</button>
+        <button class="tab-btn" onclick="setTab(this, 'tab-flex-nok')">❌ Inflexible</button>
+      </div>
+
+      <div class="tab-content active" id="tab-flex-ok">
+        <div class="key-points">
+          <div class="kp"><span class="kp-icon">⚡</span>Brûle le glucose efficacement quand les glucides sont disponibles</div>
+          <div class="kp"><span class="kp-icon">🔥</span>Brûle les graisses efficacement pendant le jeûne ou l'activité faible</div>
+          <div class="kp"><span class="kp-icon">😌</span>Maintient une énergie stable sans pics ni crashes</div>
+        </div>
+      </div>
+
+      <div class="tab-content" id="tab-flex-nok">
+        <div class="key-points">
+          <div class="kp"><span class="kp-icon">⚠️</span>Mauvaise tolérance au glucose</div>
+          <div class="kp"><span class="kp-icon">⚠️</span>Acides gras à jeun élevés</div>
+          <div class="kp"><span class="kp-icon">⚠️</span>Fatigue constante, hormones de stress élevées</div>
+          <div class="kp"><span class="kp-icon">⚠️</span>Production thyroïdienne réduite</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHAPITRE 6 -->
+  <section class="section" id="ch6">
+    <div class="section-header">
+      <div class="section-num">06</div>
+      <div class="section-title-wrap">
+        <h2>Insuline, lipolyse et contrôle hormonal</h2>
+        <div class="subtitle">Chapitre 6 — La couche de contrôle</div>
+      </div>
+    </div>
+    <div class="content">
+      <div class="callout">La graisse ne quitte pas une cellule graisseuse simplement parce que tu as mangé moins de calories.<br>Elle part parce que les <em>hormones lui permettent de partir.</em></div>
+
+      <h3>La lipolyse : le gardien de la perte de graisse</h3>
+      <p>Les triglycérides stockés doivent être décomposés en acides gras libres + glycérol — c'est la <strong>lipolyse</strong>. L'enzyme clé : la <strong>Lipase Hormono-Sensible (HSL)</strong>. Si la HSL est inactive, la graisse reste stockée. Et <strong>l'insuline contrôle directement cette porte.</strong></p>
+
+      <h3>Contrôle hormonal du stockage des graisses</h3>
+      <table class="hormone-table">
+        <thead><tr><th>Hormone</th><th>Effet sur la lipolyse</th><th>Effet sur le stockage</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Insuline</strong></td><td><span class="badge badge-down">↓ Inhibe</span></td><td><span class="badge badge-up">↑ Favorise</span></td></tr>
+          <tr><td><strong>Glucagon</strong></td><td><span class="badge badge-up">↑ Active</span></td><td><span class="badge badge-down">↓ Réduit</span></td></tr>
+          <tr><td><strong>Adrénaline</strong></td><td><span class="badge badge-up">↑ Active fortement</span></td><td><span class="badge badge-down">↓ Réduit</span></td></tr>
+          <tr><td><strong>Cortisol</strong></td><td><span class="badge badge-up">↑ Active</span></td><td><span class="badge badge-neutral">↑ Graisse viscérale</span></td></tr>
+          <tr><td><strong>T3 (thyroïde)</strong></td><td><span class="badge badge-up">↑ Soutient</span></td><td><span class="badge badge-down">↓ Réduit</span></td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout">L'insuline bloque la libération des graisses. Elle ne crée pas magiquement de la graisse à partir de rien.<br>Si les graisses alimentaires sont basses, même en présence d'insuline, le potentiel de stockage est très limité.</div>
+
+      <h3>Pourquoi un déficit chronique se retourne contre toi</h3>
+      <div class="key-points">
+        <div class="kp"><span class="kp-icon">📉</span>La leptine chute → signaux de faim augmentent</div>
+        <div class="kp"><span class="kp-icon">🦋</span>T3 chute → dépense énergétique diminue</div>
+        <div class="kp"><span class="kp-icon">😤</span>Cortisol monte → graisse viscérale favorisée</div>
+        <div class="kp"><span class="kp-icon">❄️</span>Thermogenèse adaptative → peut réduire la dépense de plusieurs centaines de kcal/jour</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHAPITRE 7 -->
+  <section class="section" id="ch7">
+    <div class="section-header">
+      <div class="section-num">07</div>
+      <div class="section-title-wrap">
+        <h2>Là où CICO s'effondre</h2>
+        <div class="subtitle">Chapitre 7 — Partitionnement énergétique vs arithmétique</div>
+      </div>
+    </div>
+    <div class="content">
+      <div class="callout">L'équilibre énergétique est réel. Mais il est <em>dynamique</em>, pas statique.</div>
+
+      <h3>Deux personnes, même déficit, résultats différents</h3>
+      <div class="scenario-grid">
+        <div class="scenario good">
+          <div class="scenario-rating">Perte de graisse optimale</div>
+          <div class="scenario-name">Bonne répartition</div>
+          <ul class="scenario-items">
+            <li>Principalement de la graisse perdue</li>
+            <li>Muscles préservés</li>
+            <li>Taux métabolique maintenu</li>
+            <li>Énergie stable</li>
+          </ul>
+        </div>
+        <div class="scenario bad">
+          <div class="scenario-rating">Perte de poids sous-optimale</div>
+          <div class="scenario-name">Mauvaise répartition</div>
+          <ul class="scenario-items">
+            <li>Muscle, glycogène, eau perdus</li>
+            <li>Métabolisme supprimé</li>
+            <li>Fatigue chronique</li>
+            <li>Reprise de poids à l'arrêt</li>
+          </ul>
+        </div>
+        <div class="scenario neutral" style="grid-column: span 1">
+          <div class="scenario-rating">Au lieu de demander</div>
+          <div class="scenario-name">La bonne question</div>
+          <ul class="scenario-items">
+            <li>❌ "Jusqu'où couper les calories ?"</li>
+            <li>✅ "Comment maintenir le TMB le plus élevé possible avec un déficit modéré ?"</li>
+          </ul>
+        </div>
+      </div>
+
+      <h3>Pourquoi certains perdent de la graisse avec plus de calories</h3>
+      <p>Augmenter les glucides peut restaurer le glycogène, élever la leptine, augmenter la T3, abaisser le cortisol, et augmenter les performances à l'entraînement. Si la dépense monte plus que l'apport monte, la perte de graisse reprend.</p>
+      <div class="callout">Ce n'est pas de la magie — c'est de la <em>restauration métabolique.</em></div>
+    </div>
+  </section>
+
+  <!-- CHAPITRE 8 -->
+  <section class="section" id="ch8">
+    <div class="section-header">
+      <div class="section-num">08</div>
+      <div class="section-title-wrap">
+        <h2>Pourquoi le High Carb Low Fat</h2>
+        <div class="subtitle">Chapitre 8 — La conclusion pratique</div>
+      </div>
+    </div>
+    <div class="content">
+      <p>Ce n'est pas une idéologie. C'est une conclusion tirée de la physiologie des carburants.</p>
+
+      <h3>L'argument en 3 points</h3>
+      <div class="key-points">
+        <div class="kp"><span class="kp-icon">1️⃣</span><div><strong>La graisse alimentaire se stocke facilement.</strong> Efficacité de stockage : 90–98%. Presque aucune pénalité métabolique. Si l'apport en graisses est bas, il y a très peu de substrat direct pour le stockage.</div></div>
+        <div class="kp"><span class="kp-icon">2️⃣</span><div><strong>Les glucides doivent d'abord remplir le glycogène.</strong> La DNL reste sous 1–3% même en suralimentation. Convertir les glucides en graisse est coûteux et rare.</div></div>
+        <div class="kp"><span class="kp-icon">3️⃣</span><div><strong>Le cycle de Randle favortise cette approche.</strong> Réduire les graisses → moins d'acides gras circulants → moins d'inhibition de l'oxydation du glucose → meilleure sensibilité à l'insuline → fonction thyroïdienne stable.</div></div>
+      </div>
+
+      <div class="callout">La perte de graisse devient un problème d'<em>optimisation métabolique</em>, pas un concours de privation.</div>
+
+      <div class="part-banner" id="coming">
+        <span class="part-icon">🔜</span>
+        <div>
+          <div class="part-label">À venir dans la suite du guide</div>
+          <div class="part-title">Partie II : Activité, entraînement & habitudes · Partie III : Protocoles avancés pour descendre sous 10%</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <p><strong>Guide Métabolique — Version incomplète</strong></p>
+    <p style="margin-top:8px;">La suite arrive bientôt. Partie II & III en cours d'écriture.</p>
+    <p style="margin-top:20px; font-size:0.7rem; opacity:0.4;">Basé sur 10 ans d'essais, d'erreurs et de recherche en physiologie du métabolisme.</p>
+  </footer>
+
+</div>
+
+<!-- SCROLL TOP -->
+<button id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+// ── THEME TOGGLE ──
+function toggleTheme() {
+  const isLight = document.documentElement.classList.toggle('light');
+  document.getElementById('themeIcon').textContent = isLight ? '🌙' : '☀️';
+  document.getElementById('themeLabel').textContent = isLight ? 'Mode sombre' : 'Mode clair';
+  localStorage.setItem('theme', isLight ? 'light' : 'dark');
+}
+
+// Restore saved theme
+(function() {
+  const saved = localStorage.getItem('theme');
+  if (saved === 'light') {
+    document.documentElement.classList.add('light');
+    document.addEventListener('DOMContentLoaded', () => {
+      const icon = document.getElementById('themeIcon');
+      const label = document.getElementById('themeLabel');
+      if (icon) icon.textContent = '🌙';
+      if (label) label.textContent = 'Mode sombre';
+    });
+  }
+})();
+
+// ── SIDEBAR ──
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+}
+function closeSidebar() {
+  if (window.innerWidth < 900) {
+    document.getElementById('sidebar').classList.remove('open');
+  }
+}
+document.addEventListener('click', function(e) {
+  const sidebar = document.getElementById('sidebar');
+  const btn = document.getElementById('menu-btn');
+  if (window.innerWidth < 900 && !sidebar.contains(e.target) && e.target !== btn) {
+    sidebar.classList.remove('open');
+  }
+});
+
+// ── PROGRESS BAR ──
+function updateProgress() {
+  const scrollTop = window.scrollY;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const pct = docHeight > 0 ? Math.round((scrollTop / docHeight) * 100) : 0;
+  document.getElementById('progressBar').style.width = pct + '%';
+  document.getElementById('progressText').textContent = pct + '% lu';
+}
+
+// ── SCROLL TOP ──
+function updateScrollTop() {
+  const btn = document.getElementById('scroll-top');
+  btn.classList.toggle('show', window.scrollY > 400);
+}
+
+// ── ACTIVE NAV ──
+function updateNav() {
+  const sections = document.querySelectorAll('section[id], div[id="coming"]');
+  const navItems = document.querySelectorAll('.nav-item');
+  let current = '';
+  sections.forEach(s => {
+    if (window.scrollY >= s.offsetTop - 120) current = s.id;
+  });
+  navItems.forEach(item => {
+    const href = item.getAttribute('href')?.replace('#', '');
+    item.classList.toggle('active', href === current);
+  });
+}
+
+// ── INTERSECTION OBSERVER FOR SECTIONS ──
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      // animate bars inside
+      e.target.querySelectorAll('.tdee-bar-fill[data-width]').forEach(bar => {
+        setTimeout(() => bar.style.width = bar.dataset.width + '%', 200);
+      });
+      // animate glycogen
+      const foie = document.getElementById('glycFoie');
+      const muscle = document.getElementById('glycMuscle');
+      if (foie && e.target.contains(foie)) {
+        setTimeout(() => { foie.style.height = '70%'; muscle.style.height = '80%'; }, 300);
+      }
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.section').forEach(s => observer.observe(s));
+
+window.addEventListener('scroll', () => {
+  updateProgress();
+  updateScrollTop();
+  updateNav();
+});
+
+// ── TABS ──
+function setTab(btn, contentId) {
+  const container = btn.closest('.section') || document;
+  btn.parentElement.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  // find all tab-content siblings
+  const allContents = container.querySelectorAll('.tab-content');
+  allContents.forEach(c => {
+    if (c.id === contentId) c.classList.add('active');
+    else if (btn.parentElement.closest('section') === c.closest('section') || true) c.classList.remove('active');
+  });
+}
+
+// Init
+updateProgress();
+updateScrollTop();
+</script>
+
+</body>
+</html>
